@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TodoMVC • Rails with React</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta name=viewport content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <%= yield %>
+
+    <footer id="info" data-turbolinks-permanent>
+      <p>Double-click to edit a todo</p>
+      <p>Created by <a href="http://www.graykemmey.com/">Gray Kemmey</a></p>
+      <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+    </footer>
+  </body>
+</html>
