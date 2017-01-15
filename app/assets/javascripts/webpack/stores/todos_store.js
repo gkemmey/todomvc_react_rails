@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux';
+import { csrfHeader } from '../helpers/async_helpers.js'
 
 const todoFilter = (state = "ALL", action) => {
   switch (action.type) {
@@ -44,7 +45,7 @@ const todos = (state = [], action) => {
 
 const message = (state = '', action) => {
   switch (action.type) {
-    case: 'SET_MESSAGE': {
+    case 'SET_MESSAGE': {
       return action.message
     }
     default: {
@@ -70,7 +71,8 @@ const store = createStore(
   combineReducers({
     todoFilter: todoFilter,
     todos:      todos,
-    message:    message
+    message:    message,
+    meta:       meta
   }),
 
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
@@ -78,7 +80,7 @@ const store = createStore(
 
 export default store;
 
-export const initialize = (todos, meta) => {
+export const initialize = ({ todos, meta }) => {
   store.dispatch({ type: 'INITIALIZE', todos: todos, meta: meta });
 }
 
@@ -87,28 +89,32 @@ export const setMessage = (message) => {
 }
 
 export const addTodo = (title) => {
-  var data = new FormData();
-  data.append('title', title;
-
-  fetch(store.getState().meta.addTodoPath, {
+  return fetch(store.getState().meta.addTodoPath, {
       method: 'POST',
       credentials: 'same-origin',
-      body: data
+      body: JSON.stringify({ todo: { title: title } }),
+      headers: new Headers({ ...csrfHeader(), 'Content-Type': 'application/json' })
     }).
-    then((response) => ( response.ok ? response : throw Error(response.statusText) )).
+    then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
     then((response) => ( response.json() )).
     then((todo) => {
       store.dispatch({
         type: "ADD_TODO",
-        { ...todo }
+        ...todo
       })
     }).
     catch((error) => { console.log("error in addTodo:", error) });
 }
 
 export const toggleTodo = (id) => {
-  fetch(`${store.getState().meta.toggleTodoPath}/${id}`, { method: 'PUT', credentials: 'same-origin' }).
-    then((response) => ( response.ok ? response : throw Error(response.statusText) )).
+  const path = store.getState().meta.toggleTodoPath.replace(/:id/gi, id);
+
+  fetch(path, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: new Headers({ ...csrfHeader() })
+    }).
+    then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
     then((response) => {
       store.dispatch({ type: "TOGGLE_TODO", id: id })
     }).
