@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Provider } from 'react-redux'
 
-import store, { initialize } from '../stores/todos_store.js'
+import store, { initialize, visibleTodos } from '../stores/todos_store.js'
 
 import NewTodo from '../todos/new_todo.jsx'
 import ToggleAll from '../todos/toggle_all.jsx'
@@ -26,6 +26,16 @@ class TodosContainer extends React.Component {
 
           <section id="main">
             <ToggleAll />
+
+            <ul id="todos">
+              {
+                visibleTodos().map((todo) => (
+                  <li key={ todo.id } className={ todo.completed ? "completed" : "" }>
+                    <TodoContainer todo={ todo } />
+                  </li>
+                ))
+              }
+            </ul>
           </section>
 
           <footer id="footer" className={ store.getState().todos.length > 0 ? "" : "hidden" }>
