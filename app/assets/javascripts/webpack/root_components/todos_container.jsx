@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import store, { initialize } from '../stores/todos_store.js'
 
 import NewTodo from '../todos/new_todo.jsx'
+import ToggleAll from '../todos/toggle_all.jsx'
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class TodosContainer extends React.Component {
           </header>
 
           <section id="main">
+            <ToggleAll />
           </section>
 
           <footer id="footer" className={ store.getState().todos.length > 0 ? "" : "hidden" }>
