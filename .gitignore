@@ -25,8 +25,9 @@ out.diff
 # don't track node_modules
 /node_modules
 
-# don't track js bundles from webpac
-/app/assets/javascripts/*_bundle.js*
+# normally, i would not track these with git, but doing so in this case makes deploying to
+# heroku simpler
+# /app/assets/javascripts/*_bundle.js*
 
 # ignore weird apple file
 .DS_Store
