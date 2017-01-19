@@ -25,6 +25,20 @@ class TodosController < ApplicationController
     end
   end
 
+  def update
+    @todo = Todo.belonging_to(session_user).find(params[:id])
+
+    respond_to do |format|
+      format.json do
+        if @todo.update_attributes(todo_params)
+          head :ok
+        else
+          render status: 422
+        end
+      end
+    end
+  end
+
   def update_multiple
     @todos = Todo.belonging_to(session_user).where(id: params[:ids])
     @todos.update_all(completed: params[:completed])
@@ -44,8 +58,8 @@ class TodosController < ApplicationController
       {
         todos: Todo.belonging_to(session_user).order(created_at: :asc).collect(&:attributes_for_react),
         meta: {
-          addTodoPath:        todos_path(format: :json),
-          toggleTodoPath:     toggle_todo_path(id: ':id', format: :json),
+          addTodoPath:             todos_path(format: :json),
+          updateTodoPath:          todo_path(id: ':id', format: :json),
           updateMultipleTodosPath: update_multiple_todos_path(format: :json)
         }
       }

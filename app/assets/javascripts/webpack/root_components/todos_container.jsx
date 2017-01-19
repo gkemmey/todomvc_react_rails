@@ -5,6 +5,7 @@ import store, { initialize, visibleTodos } from '../stores/todos_store.js'
 
 import NewTodo from '../todos/new_todo.jsx'
 import ToggleAll from '../todos/toggle_all.jsx'
+import TodoContainer from '../todos/todo_container.jsx'
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -30,9 +31,7 @@ class TodosContainer extends React.Component {
             <ul id="todos">
               {
                 visibleTodos().map((todo) => (
-                  <li key={ todo.id } className={ todo.completed ? "completed" : "" }>
-                    <TodoContainer todo={ todo } />
-                  </li>
+                  <TodoContainer key={ todo.id } id={ todo.id } />
                 ))
               }
             </ul>

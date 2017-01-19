@@ -163,12 +163,28 @@ label[for='toggle-all'] {
   padding: 0;
 }
 
-#todos li.editing .edit {
+/* -------- edit todo in list item changes -------- */
+/* we don't need to hide the real li and then display the input, so adjust the css here to
+   account for that */
+/*#todos li.editing .edit {
+  display: block;
+  width: 506px;
+  padding: 13px 17px 12px 17px;
+  margin: 0 0 0 43px;
+}*/
+
+/*#todos li .edit {
+  display: none;
+}*/
+
+#todos li input.edit {
   display: block;
   width: 506px;
   padding: 13px 17px 12px 17px;
   margin: 0 0 0 43px;
 }
+
+/* ------------------------------------------------ */
 
 #todos li.editing .view {
   display: none;
@@ -236,10 +252,6 @@ label[for='toggle-all'] {
 
 #todos li:hover .destroy {
   display: block;
-}
-
-#todos li .edit {
-  display: none;
 }
 
 #todos li.editing:last-child {

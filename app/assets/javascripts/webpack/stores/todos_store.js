@@ -25,15 +25,16 @@ const todos = (state = [], action) => {
         { id: action.id, title: action.title, completed: false }
       ];
     }
-    case 'TOGGLE_TODO': {
+    case 'UPDATE_TODO': {
       return state.map((todo) => {
         if (todo.id !== action.id) {
           return todo;
         }
 
+        const { type, id, ...updates } = action; // slice out updates to :title or :completed
         return {
           ...todo,
-          completed: !todo.completed
+          ...updates
         };
       });
     }
@@ -139,19 +140,35 @@ export const addTodo = (title) => {
     catch((error) => { console.log("error in addTodo:", error) });
 }
 
-export const toggleTodo = (id) => {
-  const path = store.getState().meta.toggleTodoPath.replace(/:id/gi, id);
+// export const toggleTodo = (id) => {
+//   const path = store.getState().meta.toggleTodoPath.replace(/:id/gi, id);
+//
+//   fetch(path, {
+//       method: 'PUT',
+//       credentials: 'same-origin',
+//       headers: new Headers({ ...csrfHeader() })
+//     }).
+//     then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
+//     then((response) => {
+//       store.dispatch({ type: "TOGGLE_TODO", id: id })
+//     }).
+//     catch((error) => { console.log("error in toggleTodo:", error ) })
+// }
 
-  fetch(path, {
+export const updateTodo = ({ id, ...params }) => {
+  const path = store.getState().meta.updateTodoPath.replace(/:id/gi, id);
+
+  return fetch(path, {
       method: 'PUT',
       credentials: 'same-origin',
-      headers: new Headers({ ...csrfHeader() })
+      body: JSON.stringify({ todo: { ...params } }),
+      headers: new Headers({ ...csrfHeader(), 'Content-Type': 'application/json' })
     }).
     then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
     then((response) => {
-      store.dispatch({ type: "TOGGLE_TODO", id: id })
+      store.dispatch({ type: "UPDATE_TODO", id: id, ...params })
     }).
-    catch((error) => { console.log("error in toggleTodo:", error ) })
+    catch((error) => { console.log("error in updateTodo:", error ) })
 }
 
 export const updateVisible = (completed) => {
