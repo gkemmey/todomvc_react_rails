@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
 import { Provider } from 'react-redux'
 
-import store, { initialize, visibleTodos } from '../stores/todos_store.js'
+import store, { initialize } from '../stores/todos_store.js'
 
 import NewTodo from '../todos/new_todo.jsx'
 import ToggleAll from '../todos/toggle_all.jsx'
-import TodoContainer from '../todos/todo_container.jsx'
+import TodosList from '../todos/todos_list.jsx'
+import TodosFooter from '../todos/todos_footer.jsx'
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -28,17 +29,10 @@ class TodosContainer extends React.Component {
           <section id="main">
             <ToggleAll />
 
-            <ul id="todos">
-              {
-                visibleTodos().map((todo) => (
-                  <TodoContainer key={ todo.id } id={ todo.id } />
-                ))
-              }
-            </ul>
+            <TodosList />
           </section>
 
-          <footer id="footer" className={ store.getState().todos.length > 0 ? "" : "hidden" }>
-          </footer>
+          <TodosFooter />
         </section>
       </Provider>
     )

@@ -34,9 +34,11 @@ class ToggleAll extends React.Component {
 }
 
 ToggleAll = connect(
-  (state, props) => ({
-    checked: visibleTodos().length > 0 && visibleTodos().every((e) => ( e.completed ))
-  })
+  (state, props) => {
+    const _visibleTodos = visibleTodos(state.todoFilter, state.todos);
+
+    return { checked: _visibleTodos.length > 0 && _visibleTodos.every((e) => ( e.completed )) };
+  }
 )(ToggleAll)
 
 export default ToggleAll;

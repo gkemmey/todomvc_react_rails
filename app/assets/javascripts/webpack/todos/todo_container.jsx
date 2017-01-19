@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import store, { visibleTodos, updateTodo } from '../stores/todos_store.js'
+import store, { visibleTodos, updateTodo, destroyTodo } from '../stores/todos_store.js'
 
 class TodoContainer extends React.Component {
   constructor(props) {
@@ -32,15 +32,12 @@ class TodoContainer extends React.Component {
   }
 
   handleCheckbox(e) {
-    console.log("checkbox");
+    updateTodo({ id: this.props.todo.id, completed: !this.props.todo.completed })
   }
 
   handleDestroy(e) {
-    console.log("destroying")
+    destroyTodo(this.props.todo.id)
   }
-
-  // TODO - need to fill in these methods, the three changes we can make to the list item
-  //        toggle, delete, edit title
 
   render() {
     const { todo } = this.props;

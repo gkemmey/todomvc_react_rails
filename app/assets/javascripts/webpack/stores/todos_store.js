@@ -50,6 +50,19 @@ const todos = (state = [], action) => {
         };
       })
     }
+    case 'DESTROY_TODO': {
+      const index = state.findIndex((todo) => ( todo.id === action.id ));
+
+      if (index === -1) {
+        return state;
+      }
+      else {
+        return [
+          ...state.slice(0, index),
+          ...state.slice(index + 1)
+        ]
+      }
+    }
     default: {
       return state;
     }
@@ -101,23 +114,23 @@ export const setMessage = (message) => {
   store.dispatch({ type: "SET_MESSAGE", message: message })
 }
 
-export const visibleTodos = () => {
+export const visibleTodos = (todoFilter, todos) => {
   // all, active, completed
-  switch (store.getState().todoFilter) {
+  switch (todoFilter) {
     case "ALL": {
-      return store.getState().todos
+      return todos
     }
 
     case "ACTIVE": {
-      return store.getState().todos.filter((e) => ( !e.completed ))
+      return todos.filter((e) => ( !e.completed ))
     }
 
     case "COMPLETED": {
-      return store.getState().todos.filter((e) => ( e.completed ))
+      return todos.filter((e) => ( e.completed ))
     }
 
     default: {
-      return store.getState().todos
+      return todos
     }
   }
 }
@@ -140,21 +153,6 @@ export const addTodo = (title) => {
     catch((error) => { console.log("error in addTodo:", error) });
 }
 
-// export const toggleTodo = (id) => {
-//   const path = store.getState().meta.toggleTodoPath.replace(/:id/gi, id);
-//
-//   fetch(path, {
-//       method: 'PUT',
-//       credentials: 'same-origin',
-//       headers: new Headers({ ...csrfHeader() })
-//     }).
-//     then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
-//     then((response) => {
-//       store.dispatch({ type: "TOGGLE_TODO", id: id })
-//     }).
-//     catch((error) => { console.log("error in toggleTodo:", error ) })
-// }
-
 export const updateTodo = ({ id, ...params }) => {
   const path = store.getState().meta.updateTodoPath.replace(/:id/gi, id);
 
@@ -172,7 +170,8 @@ export const updateTodo = ({ id, ...params }) => {
 }
 
 export const updateVisible = (completed) => {
-  let idsOfVisibleTodos = visibleTodos().reduce((r, e) => ( r.concat(e.id) ), []);
+  let idsOfVisibleTodos = visibleTodos(store.getState().todoFilter, store.getState().todos).
+    reduce((r, e) => ( r.concat(e.id) ), []);
 
   return fetch(store.getState().meta.updateMultipleTodosPath, {
       method: 'PUT',
@@ -188,4 +187,19 @@ export const updateVisible = (completed) => {
       store.dispatch({ type: "UPDATE_MULTIPLE_TODOS", ids: idsOfVisibleTodos, completed: completed })
     }).
     catch((error) => { console.log("error in updateVisible:", error ) })
+}
+
+export const destroyTodo = (id) => {
+  const path = store.getState().meta.destroyTodoPath.replace(/:id/gi, id);
+
+  return fetch(path, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: new Headers({ ...csrfHeader() })
+    }).
+    then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
+    then((response) => {
+      store.dispatch({ type: "DESTROY_TODO", id: id })
+    }).
+    catch((error) => { console.log("error in destroyTodo:", error ) })
 }

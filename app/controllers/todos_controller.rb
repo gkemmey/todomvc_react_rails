@@ -11,20 +11,6 @@ class TodosController < ApplicationController
     end
   end
 
-  def toggle
-    @todo = Todo.belonging_to(session_user).find(params[:id])
-
-    respond_to do |format|
-      format.json do
-        if @todo.update_attributes(completed: !@todo.completed)
-          head :ok
-        else
-          render status: 422
-        end
-      end
-    end
-  end
-
   def update
     @todo = Todo.belonging_to(session_user).find(params[:id])
 
@@ -48,6 +34,20 @@ class TodosController < ApplicationController
     end
   end
 
+  def destroy
+    @todo = Todo.belonging_to(session_user).find(params[:id])
+
+    respond_to do |format|
+      format.json do
+        if @todo.destroy
+          head :ok
+        else
+          render status: 422
+        end
+      end
+    end
+  end
+
   private
 
     def todo_params
@@ -60,7 +60,8 @@ class TodosController < ApplicationController
         meta: {
           addTodoPath:             todos_path(format: :json),
           updateTodoPath:          todo_path(id: ':id', format: :json),
-          updateMultipleTodosPath: update_multiple_todos_path(format: :json)
+          updateMultipleTodosPath: update_multiple_todos_path(format: :json),
+          destroyTodoPath:         todo_path(id: ':id', format: :json)
         }
       }
     end
