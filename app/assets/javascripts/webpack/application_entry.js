@@ -7,4 +7,4 @@ require('expose?ReactDOM!react-dom');
 // the example here: https://webpack.github.io/docs/context.html#context-module-api
 (
   (context) => { context.keys().map(context) }
-)(require.context("./webpack/root_components", true, /\.(js|jsx)$/));
+)(require.context("./root_components", true, /\.(js|jsx)$/));

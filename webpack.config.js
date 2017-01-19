@@ -35,7 +35,7 @@ let components = allFilesIn(__dirname + "/app/assets/javascripts/webpack/root_co
 let config = {
   entry: {
     fetch: 'whatwg-fetch',
-    application: __dirname + "/app/assets/javascripts/application_entry.js"
+    application: __dirname + "/app/assets/javascripts/webpack/application_entry.js"
   },
 
   output: {
