@@ -48,6 +48,15 @@ class TodosController < ApplicationController
     end
   end
 
+  def destroy_multiple
+    @todos = Todo.belonging_to(session_user).where(id: params[:ids])
+    @todos.destroy_all
+
+    respond_to do |format|
+      format.json { head :ok }
+    end
+  end
+
   private
 
     def todo_params
@@ -58,10 +67,11 @@ class TodosController < ApplicationController
       {
         todos: Todo.belonging_to(session_user).order(created_at: :asc).collect(&:attributes_for_react),
         meta: {
-          addTodoPath:             todos_path(format: :json),
-          updateTodoPath:          todo_path(id: ':id', format: :json),
-          updateMultipleTodosPath: update_multiple_todos_path(format: :json),
-          destroyTodoPath:         todo_path(id: ':id', format: :json)
+          addTodoPath:              todos_path(format: :json),
+          updateTodoPath:           todo_path(id: ':id', format: :json),
+          updateMultipleTodosPath:  update_multiple_todos_path(format: :json),
+          destroyTodoPath:          todo_path(id: ':id', format: :json),
+          destroyMultipleTodosPath: destroy_multiple_todos_path(format: :json)
         }
       }
     end

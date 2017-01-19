@@ -63,6 +63,9 @@ const todos = (state = [], action) => {
         ]
       }
     }
+    case 'DESTROY_COMPLETED_TODOS': {
+      return state.filter((todo) => ( !action.ids.includes(todo.id) ));
+    }
     default: {
       return state;
     }
@@ -206,4 +209,21 @@ export const destroyTodo = (id) => {
       store.dispatch({ type: "DESTROY_TODO", id: id })
     }).
     catch((error) => { console.log("error in destroyTodo:", error ) })
+}
+
+export const destroyCompleted = () => {
+  let idsOfCompletedTodos = visibleTodos("COMPLETED", store.getState().todos).
+    reduce((r, e) => ( r.concat(e.id) ), []);
+
+  return fetch(store.getState().meta.destroyMultipleTodosPath, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      body: JSON.stringify({ ids: idsOfCompletedTodos }),
+      headers: new Headers({ ...csrfHeader(), 'Content-Type': 'application/json' })
+    }).
+    then((response) => ( response.ok ? response : (() => { throw Error(response.statusText) })() )).
+    then((response) => {
+      store.dispatch({ type: "DESTROY_COMPLETED_TODOS", ids: idsOfCompletedTodos })
+    }).
+    catch((error) => { console.log("error in destroyCompleted:", error ) })
 }
