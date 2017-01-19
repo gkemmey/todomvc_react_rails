@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
-import store, { visibleTodos, updateVisible } from '../stores/todos_store.js'
+import { visibleTodos, updateVisible } from '../stores/todos_store.js'
 
 class ToggleAll extends React.Component {
   constructor(props) {

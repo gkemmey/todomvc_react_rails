@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
-import store, { visibleTodos, updateTodo, destroyTodo } from '../stores/todos_store.js'
+import { updateTodo, destroyTodo } from '../stores/todos_store.js'
 
 class TodoContainer extends React.Component {
   constructor(props) {

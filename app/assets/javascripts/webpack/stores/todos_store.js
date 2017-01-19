@@ -72,17 +72,6 @@ const todos = (state = [], action) => {
   }
 }
 
-const message = (state = '', action) => {
-  switch (action.type) {
-    case 'SET_MESSAGE': {
-      return action.message
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
 const meta = (state = {}, action) => {
   switch (action.type) {
     case 'INITIALIZE': {
@@ -100,7 +89,6 @@ const store = createStore(
   combineReducers({
     todoFilter: todoFilter,
     todos:      todos,
-    message:    message,
     meta:       meta
   }),
 
@@ -111,10 +99,6 @@ export default store;
 
 export const initialize = ({ todos, meta }) => {
   store.dispatch({ type: 'INITIALIZE', todos: todos, meta: meta });
-}
-
-export const setMessage = (message) => {
-  store.dispatch({ type: "SET_MESSAGE", message: message });
 }
 
 export const setFilter = (filter) => {
