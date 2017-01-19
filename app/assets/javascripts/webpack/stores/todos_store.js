@@ -111,7 +111,11 @@ export const initialize = ({ todos, meta }) => {
 }
 
 export const setMessage = (message) => {
-  store.dispatch({ type: "SET_MESSAGE", message: message })
+  store.dispatch({ type: "SET_MESSAGE", message: message });
+}
+
+export const setFilter = (filter) => {
+  store.dispatch({ type: "SET_FILTER", filter: filter });
 }
 
 export const visibleTodos = (todoFilter, todos) => {

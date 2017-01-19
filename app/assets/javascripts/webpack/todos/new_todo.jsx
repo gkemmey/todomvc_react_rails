@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import store, { addTodo } from '../stores/todos_store.js'
+import { addTodo } from '../stores/todos_store.js'
 
 class NewTodo extends React.Component {
   constructor(props) {
