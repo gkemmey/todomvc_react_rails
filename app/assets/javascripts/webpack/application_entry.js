@@ -1,6 +1,6 @@
 // react_ujs is going to expect these and our components to be exported globablly, so here we go
-require('expose?React!react');
-require('expose?ReactDOM!react-dom');
+require('expose-loader?React!react');
+require('expose-loader?ReactDOM!react-dom');
 
 // react_ujs is going to want all of our react components exposed globally, so go ahead and do that
 // note: i'm not entirely sure what passing context to keys().map does here 🤔, but it follows

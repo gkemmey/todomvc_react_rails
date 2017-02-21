@@ -11,6 +11,9 @@ config.plugins.push(
   })
 )
 
-config.plugins.push(new webpack.optimize.UglifyJsPlugin())
+config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+  warnings: true,
+  sourceMap: true
+}))
 
 module.exports = config;

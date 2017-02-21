@@ -44,18 +44,18 @@ let config = {
   },
 
   module: {
-    loaders: components.concat([
+    rules: components.concat([
       {
         test: /\.(js|jsx)$/,
         include: __dirname + "/app/assets/javascripts/webpack",
-        loader: "babel",
+        loader: "babel-loader",
         query: {
-          presets: ["es2015", "react", "stage-2"]
+          presets: [["es2015", { "modules": false }], "react", "stage-2"]
         }
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        use: ['style-loader', 'css-loader']
       }
     ])
   }
